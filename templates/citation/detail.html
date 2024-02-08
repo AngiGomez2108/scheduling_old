@@ -1,0 +1,180 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Detalles Cita{% endblock title %}
+{% block content %}
+<div class="card custom-card shadow-lg rounded">
+    <div class="card-header">
+        <div >
+            <b> <i class="fa-solid fa-clipboard-list" style="color:  #2980B9"></i> Detalles Cita</b>
+        </div>
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label title-list">Código:</label>
+
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.id }}" readonly>
+            </div>
+        </div>
+
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label title-list">Identificación:</label>
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.id_person.identification }}"
+                    readonly>
+            </div>
+        </div>
+
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label title-list">Nombres Completos:</label>
+            <div class="col-sm-6" style="height: 3rem;">
+                <div class="col-12">
+                    <input type="text" name="input3" class="form-control"
+                        value="{{ object.id_person.name }} {{ object.id_person.lastname }}" readonly>
+                </div>
+                <a onclick="showInfoPerson()" href="#" class="read"> <i class="fa-solid fa-eye"
+                    style="color: #2980B9;"></i> </a>
+            </div>
+            
+        </div>
+
+
+        <div class="offset-1 mb-2 row">
+            <label class="col-4 col-form-label title-list">Dependencia:</label>
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.id_process.id_place }}" readonly>
+
+            </div>
+        </div>
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label  title-list">Trámite:</label>
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.id_process }}" readonly>
+            </div>
+        </div>
+
+
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label  title-list">Funcionario:</label>
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.id_process.id_functionary }}"
+                    readonly>
+            </div>
+        </div>
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label title-list">Fecha:</label>
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.date }}" readonly>
+
+            </div>
+        </div>
+        <div class="offset-1 mt-2 row">
+            <label class="col-4 col-form-label  title-list">Hora:</label>
+            <div class="col-sm-6">
+                <input type="text" name="input3" class="form-control" value="{{ object.time }}" readonly>
+
+            </div>
+        </div>
+        </p>
+
+        <div class="text-start">
+            <a href="../list" type="submit" class="text-start btn mb-3 " style="background-color: #B2BABB;"> <i
+                    class="fa-solid fa-circle-arrow-left"></i><b> Volver</b> </a>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function showInfoPerson() {
+        Swal.fire({
+            title: 'Datos personales',
+            confirmButtonColor: '#0d6efd',
+            width: '50%',
+            html:
+                '<div class="row w-100 my-2" ><label class="col-4  "><B>Id:</B></label><div class="col-8 text-start">{{ object.id_person.id }}</div> </div>' +
+                '<div class="row w-100 my-2"><label class="col-4 text-end"><B>Tipo de persona:</B></label><div class="col-8 text-start">{{ object.id_person.id_type_person }}</div> </div>' +
+                '<div class="row w-100 my-2"><label class="col-4 text-end"><B>Tipo de identificación:</B></label><div class="col-8 text-start">{{ object.id_person.id_type_doc }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Identificación:</B></label><div class="col-8 text-start">{{ object.id_person.identification }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Nombres completos:</B></label><div class="col-8 text-start">{{ object.id_person.name }} {{ object.id_person.lastname }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Correo electrónico:</B></label><div class="col-8 text-start">{{ object.id_person.email }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Celular:</B></label><div class="col-8 text-start">{{ object.id_person.cellphone }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Dirección:</B></label><div class="col-8 text-start">{{ object.id_person.address }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Departamento:</B></label><div class="col-8 text-start">{{ object.id_person.id_depto_address }}</div> </div>' +
+                '<div class="row w-100 my-2" ><label class="col-4 text-end "><B>Municipio:</B></label><div class="col-8 text-start">{{ object.id_person.id_city_address }}</div> </div>',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        })
+    }
+</script>
+<style>
+    div:where(.swal2-container) h2:where(.swal2-title) {
+        font-size: 1em;
+    }
+
+    div:where(.swal2-container) .swal2-html-container {
+        font-size: 1em;
+    }
+
+    .custom-card {
+        max-width: 670px;
+        /* Reducir el tamaño de la tarjeta según tus necesidades */
+        margin: 0 auto;
+        margin-top: 1px;
+        /* Centrar la tarjeta en la pantalla */
+    }
+
+    .custom-title-list {
+        display: flex;
+        align-items: center;
+        color: #637381;
+
+    }
+
+    .custom-title-list i {
+        margin-right: 10px;
+        /* Espacio entre el icono y el texto */
+    }
+
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+
+    }
+
+    .card-body {
+        padding: 0 1rem;
+        background-color: #fafafa;
+
+    }
+
+    .card .card-header {
+        background-color: #ebeeee !important;
+
+    }
+
+    .title-list {
+        font-weight: bolder;
+        text-transform: capitalize;
+        color: dimgrey;
+    }
+
+    .read {
+        position: relative;
+        bottom: 1.9rem;
+        padding: 0.2rem;
+        margin-left: 18rem;
+    }
+</style>
+
+{% endblock content %}

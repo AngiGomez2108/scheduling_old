@@ -1,0 +1,208 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Gestionar Personas{% endblock title %}
+{% block content %}
+<div class=" card w-70 shadow-lg  rounded">
+  <div class="card-header">
+    <div class="title-list">
+      <i class="fa-solid fa-users-gear"></i> Gestionar Personas
+    </div>
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+    <div class="table-responsive">
+      <table class="table table-hover ">
+        <thead>
+          <tr>
+            <th scope="col" class="text-start">Cod</th>
+            <th scope="col">Identificación</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Correo Electrónico</th>
+            <th scope="col">Celular</th>
+            <th class="text-center"><i class="fa-solid fa-gears"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for person in object_list %}
+          <tr>
+            <td>{{ person.id }}</td>
+            <td>{{ person.identification }}</td>
+            <td>{{ person.name }}</td>
+            <td>{{ person.lastname }}</td>
+            <td>{{ person.email }}</td>
+            <td>{{ person.cellphone }}</td>
+
+            <td>
+              <a title="Ver" style="cursor: pointer;" href="../detail/{{ person.id }}"> <i class="fa-solid fa-eye"
+                  style="color: #2980B9;"></i></a>
+              &nbsp;&nbsp;
+              <a title="Editar" style="cursor: pointer;" href="../update/{{ person.id }}"><i class="fa-solid fa-pen"
+                  style="color:  #F1C40F;"></i></a>
+              &nbsp;&nbsp;
+              <a title="Eliminar" style="cursor: pointer;"onclick="deleteCitation({{ person.id }})"><i
+                  class="fa-solid fa-trash-can" style="color: #E74C3C;"></i></a>
+
+            </td>
+
+
+            {% empty %}
+            <td colspan="2">No existen personas</td>
+            {% endfor %}
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="d-flex justify-content-end col-12 mt-3">
+      <a href="{% url 'person-create' %}" class="btn btn-success"><i class="fa-solid fa-plus"></i> Crear Nuevo</a>
+    </div>
+    </p>
+  </div>
+</div>
+
+<style>
+  .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+    border: 0;
+    border-radius: 0.5rem;
+  }
+
+  .card-body {
+    padding: 0 1rem;
+    background-color: #fafafa;
+
+  }
+
+  .card .card-header {
+    background-color: #ebeeee !important;
+
+  }
+
+  .title-list {
+    font-weight: bolder;
+    text-transform: capitalize;
+    color: #637381;
+  }
+
+  .table thead th {
+    padding: 0.75rem 1.5rem;
+    text-transform: capitalize;
+    color: #637381;
+    align-items: flex-start;
+  }
+
+  .table .tbody {
+    font-size: 15px;
+  }
+
+  .table>:not(caption)>*>* {
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+  }
+
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  tr {
+    border: 0 solid;
+    border-color: inherit;
+  }
+</style>
+
+<script>
+function deleteCitation(id) {
+  Swal.fire({
+      title: 'Eliminar Persona',
+      text: '¿Seguro  quiere eliminar la persona?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar persona',
+      cancelButtonText: 'Cancelar',
+  }).then((result) => {
+      if (result.isConfirmed) {
+          var url = '/appointment/person/delete/' + id;
+          fetch(url, {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json; charset=UTF-8'
+              },
+              headers: {
+                  'X-CSRFToken': getCookie('csrftoken')
+              },
+          })
+              .then(response => {
+                  console.log("response", response)
+                  result = response.json()
+                  status_code = response.status;
+                  if (status_code != 200) {
+                      console.log('Error in getting brand info!')
+                      return false;
+                  }
+                  return result
+              })
+              .then(result => {
+                  console.log("response", result);
+                  if (result.success) {
+                      Swal.fire({
+                          title: 'Operación exitosa',
+                          text: result.success,
+                          icon: 'success',
+                          timer: 1500,
+                          showConfirmButton: false,
+                      }).then(() => {
+                          location.reload();
+                      });
+                  } else {
+                      Swal.fire({
+                          title: 'Error',
+                          text: result.error,
+                          icon: 'error',
+                      });
+                  }
+
+                  setTimeout(() => {
+                      // var redirectUrl = "{% url 'citation-cancel-form' %}";
+                      // window.location.href = redirectUrl; 
+                  }, 500);
+              })
+              .catch(error => {
+                  console.log(error)
+                  setTimeout(() => {
+                      var redirectUrl = "{% url 'person-list' %}";
+                      window.location.href = redirectUrl;
+                  }, 500);
+              });
+      }
+  });
+
+
+}
+
+function getCookie(name) {
+  // Divide la cadena de cookies en partes
+  var cookieArray = document.cookie.split(';');
+
+  // Itera sobre las partes para buscar la cookie deseada
+  for (var i = 0; i < cookieArray.length; i++) {
+      var cookie = cookieArray[i].trim();
+      // Comprueba si la cookie comienza con el nombre deseado
+      if (cookie.indexOf(name + '=') === 0) {
+          // Devuelve el valor de la cookie
+          return cookie.substring(name.length + 1);
+      }
+  }
+  // Si la cookie no se encuentra, devuelve null
+  return null;
+}
+
+</script>
+{% endblock content %}

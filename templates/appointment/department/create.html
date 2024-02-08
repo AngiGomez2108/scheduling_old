@@ -1,0 +1,110 @@
+
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Registrar Departamento{% endblock title %}
+{% block content %}
+<div class=" card w-50 shadow-lg  rounded">
+    <div class="card-header">
+      <div class="title-list">
+        Registrar Departamento
+      </div>
+      <b></b>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        <form id="citaForm" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% crispy form form.helper %}
+          <div class="text-end col-11">
+            <button id="btnUpdate" type="submit" class="btn btn-success">Registrar</button>
+            <a href="../list" type="submit" class="text-start btn btn-secondary">Cancelar</a>
+          </div>
+        </form>
+      </p>
+    </div>
+  </div>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+  
+      btnUpdate.addEventListener('click', function(event) {
+        event.preventDefault();
+        createDepartment();
+      });
+  
+  
+      function createDepartment() {
+        var formData = new FormData(document.getElementById('citaForm'));
+  
+        var formObject = {};
+        for (var pair of formData.entries()) {
+          formObject[pair[0]] = pair[1];
+        }
+  
+        var url = '/appointment/department/add/';
+        fetch(url, {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.message) {
+            Swal.fire({
+              title: 'Operación exitosa',
+              text: result.success,
+              icon: 'success',
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => {
+              window.location.href = "/appointment/department/list"
+            });
+          } else if (result.error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: result.error,
+            });
+          } else {
+            console.log('Respuesta inesperada:', result);
+          }
+        })
+        .catch(error => {
+          console.error('Error en la solicitud:', error);
+        });
+      }
+    });
+  </script>
+
+<style>
+  .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+      border: 0;
+      border-radius: 0.5rem;
+  }
+
+  .card-body {
+      padding: 0 1rem;
+      background-color: #fafafa;
+
+  }
+
+  .card .card-header {
+      background-color: #ebeeee !important;
+
+  }
+
+  .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+  }
+
+  label{
+    color: rgb(58, 58, 58);
+    font-weight: 500;
+  }
+</style>
+{% endblock content %}

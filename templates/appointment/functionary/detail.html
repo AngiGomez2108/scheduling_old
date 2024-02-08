@@ -1,0 +1,156 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+
+<div class=" card w-50 shadow-lg  rounded">
+    <div class="card-header">
+        <div class="title-list">
+            <i class="fa-solid fa-eye"
+            style="color: #2980B9;"></i></a>     Detalles Funcionario
+        </div>
+       <b>  </b>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Código:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value="{{ object.id }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Tipo de Documento:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value="{{ object.id_type_doc }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Identificación:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value="{{ object.identification }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Nombres:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value=" {{ object.name }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Apellidos:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value=" {{ object.lastname }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Correo Electrónico:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value="  {{ object.email }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Celular:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value="  {{ object.cellphone }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offset-1 mb-2 row ">
+            <!-- Primera columna -->
+            <div class="col-12">
+                <!-- Primer par label e input -->
+                <div class="form-group row">
+                    <label class=" col-form-label col-5">Dependencia:</label>
+                    <div class="col-6">
+                        <input type="text" name="input1" class="form-control" value="  {{ object.id_place }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+      </p>
+      <div class="text-start">
+        <a href="../list" type="submit" class="text-start btn mb-3 " style="background-color: #B2BABB;"> <i
+                class="fa-solid fa-circle-arrow-left"></i><b> Volver</b> </a>
+
+    </div>
+    </div>
+  </div>
+<style>
+    
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+
+    }
+
+    .card-body {
+        padding: 0 1rem;
+        background-color: #fafafa;
+
+    }
+
+    .card .card-header {
+        background-color: #ebeeee !important;
+
+    }
+
+    .title-list {
+        font-weight: 500;
+        text-transform: capitalize;
+        color: #637381;
+    }
+    label{
+      color: rgb(58, 58, 58);
+      font-weight: 500;
+    }
+</style>
+
+{% endblock content %}

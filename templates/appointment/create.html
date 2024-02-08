@@ -1,0 +1,461 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+<style>
+    body {
+
+        background-image: url("{% static 'images/bg4.jpg' %}");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+
+    }
+</style>
+
+{{ form.media }}
+<style>
+    .flatpickr-input {
+        display: none;
+    }
+</style>
+<div class=" offset-1 card  col-9 shadow-lg  rounded">
+    <div class="card-header">
+        <div class= "title-list">
+            <i class="fa-solid fa-calendar-day"></i> Reserve su cita
+    
+          </div>
+    </div>
+    <div class="card-body">
+
+        <p class="offset-1 col-12">
+            <small>
+                Estimado: <B> {{ person.name }} {{ person.lastname }}, </B> identificado con <B>{{ person.id_type_doc }}</B>
+                Nro. <B>{{ person.identification }}</B> <br> a continuación seleccione la información
+                específica de la cita a solicitar
+            </small>
+        </p>
+        <p class="card-text">
+
+        <form method="post">
+
+            {% csrf_token %}
+            <div class="offset-1 mb-3 row">
+                <label for="inputPassword" class="col-sm-2 col-form-label h2">Dependencia:</label>
+                <div class="col-sm-8">
+                    {{ form.place }}
+                </div>
+            </div>
+            <div class="offset-1 mb-3 row">
+                <label for="inputPassword" class="col-sm-2 col-form-label h2">Trámite:</label>
+                <div class="col-sm-8">
+                    {{ form.id_process }}
+                </div>
+            </div>
+
+
+            <div class="offset-1 container">
+                <div class="row mb-3">
+                    <div class="col-sm-6 ">
+                        <div class="  card" style="width: 21rem; ">
+                             <img style="height: 5rem;" src="{% static 'images/boat-3062045_640.jpg' %}" class="card-img" 
+                                alt="..."> 
+                            <div class="card-img-overlay h-100  justify-content-end text-center">
+                                <h1 class="card-title" style="color:white; text-shadow: 0.1em 0.1em 0.05em #333"
+                                    id="div_text_date"></h1>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    {{ form.date }}
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-3  ">
+                        Horas disponibles
+                        <select id="time" class="form-select anchura text-center" size="17" aria-label="size 2 select example"
+                            style="width: 70%;">
+                        </select>
+
+                        <div class="d-flex justify-content-end col-11 mt-3">
+                            <button type="button" id="btn-add" class="btn btn-success"><i class="fa-solid fa-calendar-check"></i> Registrar Cita </button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- <div class="offset-2 container">
+                <div class="row mb-3" >
+                    <div class="col-sm-3 " style="padding-top: 1rem;padding-bottom: 1rem; background-color: rgb(98, 158, 158);">
+                        Fecha:
+                    </div>
+                    <div class="col-sm-5  "  style="padding-top: 1rem; padding-bottom: 1rem; background-color: rgb(98, 158, 158);">
+                        {{   form.date  }}
+                    </div>
+                </div>
+            </div> -->
+
+
+
+        </form>
+
+
+        </p>
+    </div>
+</div>
+<script>
+    var holidays = []
+
+    flatpickr.localize(flatpickr.l10ns.es);
+    selectTimes = document.querySelector('#time');
+   
+    var datePicker = $("#id_date").flatpickr({
+        inline: true,
+        minDate: "today",
+        dateFormat: "d M, Y",
+        defaultDate: new Date().toISOString().slice(0, 10), // Obtiene la fecha actual en formato YYYY-MM-DD,
+        locale: {
+            firstDayOfWeek: 0
+        },
+        maxDate: new Date().fp_incr(7), // 7 days from now
+        "disable": [
+            function (date) {
+                // return true to disable
+               return (date.getDay() === 0 || date.getDay() === 6 || isHoliday(date) || isToday(date));
+            }
+        ],
+        onChange: function (selectedDates, dateStr, instance) {
+            $("#div_text_date").html(dateStr);
+            //actualizar las horas disponibles
+            updateTimes();
+        },
+        onOpen: function (selectedDates, dateStr, instance) {
+            alert(dateStr);
+
+            // document.querySelector('#id_date').value=new Date();
+
+        },
+    });
+    getHoliday();
+    // obtener los días festivos    
+    function getHoliday(){
+        var url = '/appointment/holiday/get';
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                holidays = data.holidays
+                datePicker.set("disable", [
+                    function (date) {
+                       return (date.getDay() === 0 || date.getDay() === 6 || isHoliday(date) || isToday(date));
+                    }
+                ]);
+
+                // Cierra y vuelve a abrir el datepicker para aplicar los cambios
+                datePicker.close();
+                datePicker.open();
+            })
+            .catch(error => {
+                console.log("error al traer los festivos")
+            })
+    }
+    
+    function isHoliday(dataPickDate){
+        //getHoliday();
+        // Fecha en el formato dado
+        let fechaOriginal = new Date(dataPickDate);
+        // Extraer componentes de la fecha
+        let dia = fechaOriginal.getDate();
+        let mes = fechaOriginal.getMonth() + 1; // Nota: getMonth() devuelve el mes de 0 a 11
+        let anio = fechaOriginal.getFullYear();
+
+        // Formatear la fecha
+        let fechaFormateada = anio.toString() + '-' +
+                            mes.toString().padStart(2, '0') + '-' +
+                            dia.toString().padStart(2, '0');
+        let disable = false;
+        
+        holidays.forEach(holiday => {
+            if (holiday.date == fechaFormateada){
+                disable = true;
+                return true
+            }
+        })
+        return disable;
+    }
+
+    function currentDate(){
+        // Crear un nuevo objeto Date que representa la fecha y hora actuales
+        let fechaActual = new Date();
+
+        // Obtener los componentes de la fecha (mes, día, año)
+        let month = fechaActual.getMonth() + 1; // Nota: Los meses en JavaScript van de 0 a 11
+        let day = fechaActual.getDate();
+        let year = fechaActual.getFullYear();
+
+        // Formatear la fecha como "YYYY - MM - DD"
+        // Formatear la fecha
+        let formattedDate = year.toString() + '-' +
+                            month.toString().padStart(2, '0') + '-' +
+                            day.toString().padStart(2, '0');
+        
+        console.log(formattedDate);
+        return formattedDate;
+    }
+
+    function isToday(dataPickDate){
+        let fechaOriginal = new Date(dataPickDate);
+        // Extraer componentes de la fecha
+        let dia = fechaOriginal.getDate();
+        let mes = fechaOriginal.getMonth() + 1; // Nota: getMonth() devuelve el mes de 0 a 11
+        let anio = fechaOriginal.getFullYear();
+
+        // Formatear la fecha
+        let fechaFormateada = anio.toString() + '-' +
+                            mes.toString().padStart(2, '0') + '-' +
+                            dia.toString().padStart(2, '0');
+        let disable = false;
+        
+        if (currentDate() == fechaFormateada){
+            disable = true;
+            return true
+        }
+        return disable;
+
+    }
+
+    //actualizar horas en select    
+    function updateTimes() {
+        //actualizar las horas disponibles
+        selectProcess = document.querySelector('#id_id_process');
+        var options = "";
+        var id_process = selectProcess.value;
+        var selectedDate = datePicker.selectedDates[0];
+        var url = '/appointment/add/';
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'change_date',
+                id_process: id_process,
+                date: datePicker.formatDate(selectedDate, "Y-m-d"),
+            }),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+            .then(response => {
+                result = response.json()
+                status_code = response.status;
+                if (status_code != 200) {
+                    console.log('Error in getting brand info!')
+                    return false;
+                }
+                return result
+            })
+            .then(result => {
+                //alert("result-->"+result)
+                let options = "";
+                if (result[0].times[0].length > 0) {
+                    result[0].times[0].forEach(element => {
+                        options += "<option value='" + element + "''>" + element + "</option>";
+                        //alert(element);
+                        console.log(element)
+                    });
+                }else{
+                 options += "<option disabled style='color: gray; white-space: normal; '> No hay horarios disponibles</option>";
+                }
+                selectTimes.innerHTML = options;
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+
+    }
+
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = (Math.random() * 16) | 0,
+            v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+
+    $(document).ready(function () {
+        datePicker.setDate(new Date());
+        var fechaSeleccionada = datePicker.selectedDates[0];
+        var fechaFormateada = datePicker.formatDate(fechaSeleccionada, "d M, Y");
+        $("#div_text_date").html(fechaFormateada);
+    });
+
+    btnadd = document.querySelector('#btn-add');
+    selectPlace = document.querySelector('#id_place');
+    selectProcess = document.querySelector('#id_id_process');
+
+
+
+    selectPlace.addEventListener('change', (event) => {
+        selectTimes.innerHTML = "";
+        var options = "<option value=''>----</option>";
+        var id = selectPlace.value;
+        //var url = window.location.pathname;
+        var url = '/appointment/add/'
+        if (id == '') {
+            selectProcess.innerHTML = options;
+            return false;
+        }
+
+        fetch(url, {
+            method: 'POST',
+
+            body: JSON.stringify({
+                action: 'search_process_id',
+                id: id
+            }),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+            .then(response => {
+                result = response.json()
+                status_code = response.status;
+                if (status_code != 200) {
+                    console.log('Error in getting brand info!')
+                    return false;
+                }
+
+                return result
+            })
+            .then(result => {
+                result.forEach(element => {
+                    options += "<option value=" + element.id + ">" + element.name + "</option>";
+                });
+                selectProcess.innerHTML = options;
+                //console.log(result);
+
+                // Do something with the result
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+
+    });
+
+    ///cambiar trámite
+    selectProcess.addEventListener('change', (event) => {
+        //actualizar las horas disponibles
+        updateTimes();
+    });
+
+
+    ///enviar a registrar
+    btnadd.addEventListener('click', (event) => {
+        btnadd.disabled = true;
+        var url = '/appointment/add/';
+        var fechaSeleccionada = datePicker.selectedDates[0];
+        //dar formato a la hora 
+       // alert(selectTimes.value);
+        var splitDate = document.querySelector('#time').value.split(" ");
+        var time = splitDate[0].split(":");
+       
+        if (splitDate[1] == 'PM' && time[0] != 12) {
+            time[0] = parseInt(time[0]) + 12
+        }
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'appointment_add',
+                id_person: "{{ person.id }}",
+                id_process: selectProcess.value,
+                date: datePicker.formatDate(fechaSeleccionada, "Y-m-d"),
+                time: time[0] + ":" + time[1],
+                uuid: generateUUID()
+            }),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+            .then(response => {
+                result = response.json()
+                status_code = response.status;
+                if (status_code != 200) {
+                    console.log('Error in getting brand info!')
+                    return false;
+                }
+                return result
+            })
+            .then(result => {
+                if (result[0].success) {
+                    Swal.fire({
+                        title: 'Operación exitosa',
+                        text: "Cita asignada satisfactoriamente",
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        btnadd.disabled = false;
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: result[1].error,
+                        icon: 'error',
+                        timer: 1500,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        btnadd.disabled = false;
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    text: "Error al registrar la cita",
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false,
+                }).then(() => {
+                    btnadd.disabled = false;
+                });
+            })
+    });
+
+
+</script>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+    }
+  
+    .card-body {
+        padding: 1rem 1rem;
+        background-color: #fafafa;
+  
+    }
+  
+    .card .card-header {
+        background-color: #ebeeee !important;
+  
+    }
+  
+    .title-list {
+        font-weight: bolder;
+        text-transform: capitalize;
+        color: #637381;
+    }
+  
+  </style>
+{% endblock content %}

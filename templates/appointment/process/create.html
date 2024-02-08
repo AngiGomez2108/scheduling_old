@@ -1,0 +1,321 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Registrar Trámite{% endblock title %}
+{% block content %}
+<style>
+  table.table-hover tr:hover {
+    background-color: #abc1c7;
+  }
+</style>
+<div class=" card shadow-lg  rounded">
+  <div class="card-header">
+    <div class="title-list">
+      <i class="fa-regular fa-folder-open" style="color:#3264A0 ;"></i>  Registrar Trámite 
+    </div>
+    <b> </b>
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      <form id="citaForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy form form.helper %}
+
+      </form>
+    
+    <div class="container" >
+      <div class="row" style="border: rgba(0, 0, 0, 0.175) 1px solid">
+        <div class="col">
+          <div class="table-responsive overflow-auto">
+            <table style="font-size: x-small;"
+              class="table table-sm caption-top table-striped table-hover align-middle ">
+              <caption>Horario Mañana</caption>
+              <thead>
+                <tr class="text-center">
+                  <th scope="col">Hora</th>
+                  <th scope="col">Lunes</th>
+                  <th scope="col">Martes</th>
+                  <th scope="col">Miércoles</th>
+                  <th scope="col">Jueves</th>
+                  <th scope="col">Viernes</th>
+                </tr>
+              </thead>
+              <tbody id="id_table1">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <div class="table-responsive overflow-auto">
+            <table style="font-size: x-small;"
+              class="table table-sm caption-top table-striped table-hover align-middle ">
+              <caption>Horario Tarde</caption>
+              <thead>
+                <tr class="text-center">
+                  <th scope="col">Hora</th>
+                  <th scope="col">Lunes</th>
+                  <th scope="col">Martes</th>
+                  <th scope="col">Miércoles</th>
+                  <th scope="col">Jueves</th>
+                  <th scope="col">Viernes</th>
+                </tr>
+              </thead>
+              <tbody id="id_table2">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <br>
+    <div class="text-end">
+      <button id="btnUpdate" type="button" class="btn btn-success">Registrar</button>
+      <a href="../list" type="button" class="text-start btn btn-secondary" > Cancelar</a>
+    </div>
+    </p>
+  </div>
+</div>
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+
+    btnUpdate.addEventListener('click', function(event) {
+      event.preventDefault();
+      actualizarTramite();
+    });
+
+
+    function actualizarTramite() {
+      var formData = new FormData(document.getElementById('citaForm'));
+      timetable = validateForm();
+      
+      var formObject = {};
+      for (var pair of formData.entries()) {
+        formObject[pair[0]] = pair[1];
+      }
+      formData.append('timetable', timetable);
+      // Mostrar el objeto en la consola
+      console.log('Datos del formulario:', formObject);
+
+      var url = '/appointment/process/add/';
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.message) {
+          Swal.fire({
+            title: 'Operación exitosa',
+            text: result.success,
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
+          }).then(() => {
+            window.location.href = "/appointment/process/list"
+          });
+        } else if (result.error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: result.error,
+          });
+        } else {
+          console.log('Respuesta inesperada:', result);
+        }
+      })
+      .catch(error => {
+        console.error('Error en la solicitud:', error);
+      });
+    }
+  });
+
+  $(document).ready(function () {
+    selectTime = document.querySelector('#id_time');
+    table1 = document.querySelector('#id_table1');
+    table2 = document.querySelector('#id_table2');
+
+
+    selectTime.addEventListener('change', (event) => {
+      var trs = "";
+      var time = selectTime.value;
+      //var url = '/appointment/add/'
+      if (time == '') {
+        table1.innerHTML = trs;
+        table2.innerHTML = trs;
+        return false;
+      }
+      else {
+        var hora = new Date(); // Crea un objeto Date con la fecha y hora actual
+
+        hora.setHours(7); // Establece la hora a las 9 (9 AM)
+        hora.setMinutes(0); // Establece los minutos a 30
+        hora.setSeconds(0); // Establece los segundos a 0
+
+        console.log(hora + "----" + time + "----"); // Muestra la fecha y hora asignadas
+
+        //horario mañana
+        while (hora.getHours() < 12) {
+          let timeShow = (hora.getHours() < 10 ? '0' + hora.getHours() : hora.getHours()) + ":" + (hora.getMinutes() < 10 ? '0' + hora.getMinutes() : hora.getMinutes());
+          trs += "<tr class='text-center'> ";
+          trs += "<th>" + timeShow + " AM </th>";
+          trs += "<td> <input type='checkbox' value='0-" + timeShow + " AM' " + (hora.getHours() < 8 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='1-" + timeShow + " AM' " + (hora.getHours() < 8 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='2-" + timeShow + " AM' " + (hora.getHours() < 8 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='3-" + timeShow + " AM' " + (hora.getHours() < 8 ? "" : "checked") + "></td>";
+          trs += "<td><input type='checkbox' value='4-" + timeShow + " AM'  checked></td>";
+          trs += "</tr>";
+          //fecha.setMinutes(fecha.getMinutes() + time);
+          hora = new Date(hora.getTime() + time * 60000); // Suma los minutos en milisegundos
+          console.log(hora + "----" + time + "----"); // Muestra la fecha y hora asignadas
+        }
+        table1.innerHTML = trs;
+
+        //horario tarde
+        trs = "";
+        while (hora.getHours() < 18) {
+          hour = (hora.getHours() > 12 ? hora.getHours() - 12 : hora.getHours())
+          let timeShow = (hour < 10 ? '0' + hour : hour) + ":" + (hora.getMinutes() < 10 ? '0' + hora.getMinutes() : hora.getMinutes());
+          trs += "<tr class='text-center'>";
+          trs += "<th>" + timeShow + " PM </th>";
+          trs += "<td> <input type='checkbox' value='0-" + timeShow + " PM' " + (hora.getHours() < 14 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='1-" + timeShow + " PM'" + (hora.getHours() < 14 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='2-" + timeShow + " PM'" + (hora.getHours() < 14 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='3-" + timeShow + " PM'" + (hora.getHours() < 14 ? "" : "checked") + "></td>";
+          trs += "<td> <input type='checkbox' value='4-" + timeShow + " PM'" + (hora.getHours() < 15 ? "checked" : "") + "></td>";
+          trs += "</tr>";
+          //fecha.setMinutes(fecha.getMinutes() + time);
+          hora = new Date(hora.getTime() + time * 60000); // Suma los minutos en milisegundos
+          console.log(hora + "----" + time + "----"); // Muestra la fecha y hora asignadas
+        }
+        table2.innerHTML = trs;
+
+      }
+
+      /*
+        if date_object.weekday() != 4: #si es diferente a viernes
+                        timeStart = datetime.strptime('08:00', '%H:%M')
+                        timeEnd = time(18, 0) 
+                        noon = time(12,0)
+                        while timeStart.time() < timeEnd:
+                           if timeStart.time() < noon or timeStart.time() >= time(14,0):   
+                                times.append(str(timeStart.time().strftime('%I:%M %p')))
+                           timeStart += rangeTime
+                    else:
+                        timeStart = datetime.strptime('07:00', '%H:%M')
+                        timeEnd = time(15, 0)
+                        noon = time(12,0)
+                        while timeStart.time() < timeEnd:
+                            times.append(str(timeStart.time().strftime('%I:%M %p')))
+                            timeStart += rangeTime
+      */
+
+      /* fetch(url, {
+         method: 'POST',
+         body: JSON.stringify({
+           action: 'search_process_id',
+           id: id
+         }),
+         headers: {
+           'Content-Type': 'application/json; charset=UTF-8'
+         }
+       })
+         .then(response => {
+           result = response.json()
+           status_code = response.status;
+           if (status_code != 200) {
+             console.log('Error in getting brand info!')
+             return false;
+           }
+ 
+           return result
+         })
+         .then(result => {
+           result.forEach(element => {
+             options += "<option value=" + element.id + ">" + element.name + "</option>";
+           });
+           selectProcess.innerHTML = options;
+           //console.log(result);
+ 
+           // Do something with the result
+ 
+         })
+         .catch(error => {
+           console.log(error)
+         })*/
+
+    });
+
+  });
+
+  function validateForm() {
+    timetable = document.getElementById("timetable");
+
+    let arr0 = [], arr1 = [], arr2 = [], arr3 = [], arr4 = [];
+    let checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkTime = checkboxes[i].value.split('-');
+      console.log(checkTime);
+      if (checkTime[0] == '0') {
+        arr0.push('"' + checkTime[1] + '"');
+      }
+      if (checkTime[0] == '1') {
+        arr1.push('"' + checkTime[1] + '"');
+      }
+      if (checkTime[0] == '2') {
+        arr2.push('"' + checkTime[1] + '"');
+      }
+      if (checkTime[0] == '3') {
+        arr3.push('"' + checkTime[1] + '"');
+      }
+      if (checkTime[0] == '4') {
+        arr4.push('"' + checkTime[1] + '"');
+      }
+      //arr.push(checkboxes[i].value);
+    }
+    // Converted array to string & alert
+    timetable.value = '{"0":[' + arr0.toString() + '],"1":[' + arr1.toString() + '],"2":[' + arr2.toString() + '],"3":[' + arr3.toString() + '],"4":[' + arr4.toString() + ']}';
+
+
+    //alert(timetable.value);
+
+
+    // Everything is good, so let's submit the form
+    return timetable.value;
+  }
+
+
+ </script>
+
+<style>
+  .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+      border: 0;
+      border-radius: 0.5rem;
+  }
+
+  .card-body {
+      padding: 1rem 1rem;
+      background-color: #fafafa;
+
+  }
+
+  .card .card-header {
+      background-color: #ebeeee !important;
+
+  }
+
+  .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+  }
+</style>
+{% endblock content %}

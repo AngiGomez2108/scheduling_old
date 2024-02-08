@@ -1,0 +1,112 @@
+.{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Gestionar Personas{% endblock title %}
+{% block content %}
+<div class=" card w-70 shadow-lg  rounded">
+    <div class="card-header">
+      <div class="title-list">
+       Citas Solicitadas
+      </div>
+     <b>  </b>
+    </div>
+    <div class="card-body" >
+      <p class="card-text ">
+       
+        <table class="table table-hover mt-1">
+            <thead>
+                <tr>
+                  <th scope="col">Identificación</th>
+                  <th scope="col">Solicitante</th>
+                  <th scope="col">Fecha cita</th>
+                  <th scope="col">Hora Cita</th>
+                  <th scope="col">Trámite</th>
+                  <th scope="col">Funcionario</th>
+                  <th class="offset-1"><i class="fa-solid fa-gears"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for citation in citations %}
+                <tr>
+                    <td>{{ citation.id_person.identification }}</td>
+                    <td>{{ citation.id_person.name }} {{ citation.id_person.lastname }}</td>
+                    <td>{{ citation.date }}</td>
+                    <td>{{ citation.time }}</td> 
+                    <td>{{ citation.id_process.name }}</td> 
+                    <td>{{ citation.id_process.id_functionary.name }} {{ citation.id_process.id_functionary.lastname }}</td> 
+                    <td>
+                        {% if citation.status == 'C'%}
+                            <p>La cita ya se encuentra cerrada<p>
+                        {% else %}
+                            <a title="Ver" style="cursor: pointer;" href="{% url 'citation-cancel' %}?typedoc={{citation.id_person.id_type_doc.id}}&identification={{citation.id_person.identification}}&email={{citation.id_person.email}}&uuid={{citation.uuid}}&status={{citation.status}}&consult=true"> 
+                            <i class="fa-solid fa-eye" style="color: #2980B9;"></i></a>
+                            &nbsp;&nbsp;
+                        {% endif %}
+                    </td>
+                        
+                    
+            {% empty %}
+                <td colspan="2">No existen registros</td>
+            {% endfor %}
+        </tr>
+                
+              </tbody>
+          </table>   
+      </p>
+    </div>
+  </div>
+  <style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+    }
+
+    .card-body {
+        padding: 0 1rem;
+        background-color: #fafafa;
+
+    }
+
+    .card .card-header {
+        background-color: #ebeeee !important;
+
+    }
+
+    .title-list {
+        font-weight: bolder;
+        text-transform: capitalize;
+        color: #637381;
+    }
+
+    .table thead th {
+        padding: 0.75rem 0.5rem;
+        text-transform: capitalize;
+        color: #637381;
+    }
+
+    .table .tbody {
+        font-size: 15px;
+    }
+
+    .table>:not(caption)>*>* {
+        background-color: var(--bs-table-bg);
+        border-bottom-width: 1px;
+        box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+    }
+
+    tbody,
+    td,
+    tfoot,
+    th,
+    thead,
+    tr {
+        border: 0 solid;
+        border-color: inherit;
+    }
+</style>
+{% endblock content %}
+
+

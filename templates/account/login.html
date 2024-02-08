@@ -1,0 +1,76 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+<style>
+    body{
+     
+      background-image: url("{% static 'images/bg1.jpg' %}");
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+  
+    }
+  </style>
+<div class=" card w-50 shadow-lg  rounded">
+    <div class="card-header">
+      <div class="title-list">
+        <i class="fa fa-regular fa-circle-user" style="font-size: 1.2rem;"></i> <b>Iniciar Sesión</b>
+
+      </div>
+    </div>
+    <div class="card-body" >
+      <p class="card-text">
+       
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="d-flex justify-content-end col-11">
+                <button type="submit" class="btn btn-success">Iniciar <i class="fa-solid fa-circle-arrow-right"></i></button>
+               
+             </div> 
+            
+        </form>
+  
+      </p>
+    </div>
+  </div>
+
+<style>
+  .card {
+        width: 600px;
+        overflow: hidden;
+        position: relative;
+        background-color: #fafafa;
+        text-align: left;
+        border-radius: 0.5rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-style: solid;
+        border-width: 1px 1px 1px 1px;
+        border-color: rgb(173, 171, 171);
+
+    }
+    .header {
+        padding: 1.25rem 1rem 1rem 1rem;
+        background-color: #ebeeee;
+    }
+
+    label{
+      color: rgb(58, 58, 58);
+      font-weight: 500;
+    }
+
+    .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+  }
+  
+  
+  </style>
+
+
+{% endblock content %}

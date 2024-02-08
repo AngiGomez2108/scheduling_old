@@ -1,0 +1,120 @@
+
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Registrar Dia festivo{% endblock title %}
+{% block content %}
+<div class=" card w-50 shadow-lg  rounded">
+    <div class="card-header">
+      <div class="title-list">
+        <i class="fa-solid fa-pen" style="color: #F1C40F;"></i></i> Actualizar Día festivo 
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+       
+        <form id="citaForm" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% crispy form form.helper %}
+          <div class="col-12 text-end">
+            <button id="btnUpdate" type="submit" class="btn btn-success">Actualizar</button>
+            <a href="../list" type="submit" class="text-start btn btn-secondary">Cancelar</a>
+          </div>
+        </form>
+  
+      </p>
+    </div>
+  </div>
+
+  <script>
+  $("#id_date").flatpickr({
+    minDate: "today",
+    dateFormat: "d/m/Y",
+    locale: {
+        firstDayOfWeek: 0
+    },
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+  
+    btnUpdate.addEventListener('click', function(event) {
+      event.preventDefault();
+      updateHoliday();
+    });
+
+
+    function updateHoliday() {
+      var formData = new FormData(document.getElementById('citaForm'));
+      var url = window.location.href;
+      var segmentos = url.split('/');
+      var id = segmentos[segmentos.length - 1];
+
+      var formObject = {};
+      for (var pair of formData.entries()) {
+        formObject[pair[0]] = pair[1];
+      }
+
+      // Mostrar el objeto en la consola
+      console.log('Datos del formulario:', formObject);
+
+      var url = '/appointment/holiday/update/' + id;
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.message) {
+          Swal.fire({
+            title: 'Operación exitosa',
+            text: result.success,
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
+          }).then(() => {
+            window.location.href = "/appointment/holiday/list"
+          });
+        } else if (result.error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: result.error,
+          });
+        } else {
+          console.log('Respuesta inesperada:', result);
+        }
+      })
+      .catch(error => {
+        console.error('Error en la solicitud:', error);
+      });
+    }
+  });
+</script>
+
+<style>
+  .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+      border: 0;
+      border-radius: 0.5rem;
+  }
+
+  .card-body {
+      padding: 1rem 1rem;
+      background-color: #fafafa;
+
+  }
+
+  .card .card-header {
+      background-color: #ebeeee !important;
+
+  }
+
+  .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+  }
+</style>
+{% endblock content %}

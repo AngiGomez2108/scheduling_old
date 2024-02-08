@@ -1,0 +1,212 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+
+<div class=" card shadow-lg  rounded">
+    <div class="card-header">
+        <div class="custom-title-list">
+            <b> <i class="fa-solid fa-circle-user"></i>Detalles Persona</b>
+        </div>
+
+
+    </div>
+    <div class="card-body">
+        <p class="card-text form-horizontal">
+            <div class="offset-1 mb-3 row ">
+                <!-- Primera columna -->
+                <div class="col-6">
+                    <!-- Primer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Código:</label>
+                        <div class="col-6">
+                            <input type="text" name="input1" class="form-control" value="  {{ object.id }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="col-6">
+                    <!-- Tercer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Tipo de Persona:</label>
+                        <div class="col-6">
+                            <input type="text" name="input3" class="form-control" value="  {{ object.id_type_person }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offset-1 mb-3 row ">
+                <!-- Primera columna -->
+                <div class="col-6">
+                    <!-- Primer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Tipo Documento:</label>
+                        <div class="col-6">
+                            <input type="text" name="input1" class="form-control" value=" {{ object.id_type_doc }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="col-6">
+                    <!-- Tercer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Identificación:</label>
+                        <div class="col-6">
+                            <input type="text" name="input3" class="form-control" value="{{ object.identification }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offset-1 mb-3 row ">
+                <!-- Primera columna -->
+                <div class="col-6">
+                    <!-- Primer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Nombres:</label>
+                        <div class="col-6">
+                            <input type="text" name="input1" class="form-control" value="{{ object.name }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="col-6">
+                    <!-- Tercer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Apellidos:</label>
+                        <div class="col-6">
+                            <input type="text" name="input3" class="form-control" value="{{ object.lastname }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offset-1 mb-3 row ">
+                <!-- Primera columna -->
+                <div class="col-6">
+                    <!-- Primer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Correo Electrónico:</label>
+                        <div class="col-6">
+                            <input type="text" name="input1" class="form-control" value="{{ object.email }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="col-6">
+                    <!-- Tercer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Celular:</label>
+                        <div class="col-6">
+                            <input type="text" name="input3" class="form-control" value="{{ object.cellphone }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offset-1 mb-3 row ">
+                <!-- Primera columna -->
+                <div class="col-6">
+                    <!-- Primer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Dirección:</label>
+                        <div class="col-6">
+                            <input type="text" name="input1" class="form-control" value="{{ object.address }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="col-6">
+                    <!-- Tercer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Departamento:</label>
+                        <div class="col-6">
+                            <input type="text" name="input3" class="form-control" value="{{ object.id_depto_address }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offset-1 mb-3 row ">
+                <!-- Primera columna -->
+                <div class="col-6">
+                    <!-- Primer par label e input -->
+                    <div class="form-group row">
+                        <label class="title-list col-form-label col-4">Municipio:</label>
+                        <div class="col-6">
+                            <input type="text" name="input1" class="form-control" value="{{ object.id_city_address }}"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </p>
+            <div class="text-start">
+                <a href="../list" type="submit" class="text-start btn mb-3 " style="background-color: #B2BABB;"> <i
+                        class="fa-solid fa-circle-arrow-left"></i><b> Volver</b> </a>
+
+            </div>
+
+    </div>
+</div>
+
+<style>
+    .custom-card {
+        width: 95%;
+        /* Reducir el tamaño de la tarjeta según tus necesidades */
+        margin: 0 auto;
+        margin-top: 1px;
+        /* Centrar la tarjeta en la pantalla */
+    }
+
+    .custom-title-list {
+        display: flex;
+        align-items: center;
+
+    }
+
+    .custom-title-list i {
+        margin-right: 10px;
+        /* Espacio entre el icono y el texto */
+    }
+
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+
+    }
+
+    .card-body {
+        padding: 0 1rem;
+        background-color: #fafafa;
+
+    }
+
+    .card .card-header {
+        background-color: #ebeeee !important;
+
+    }
+
+    .title-list {
+        font-weight: 500;
+        text-transform: capitalize;
+        color: #637381;
+    }
+
+    .col-form-label {
+        padding-top: 0
+    }
+</style>
+{% endblock content %}

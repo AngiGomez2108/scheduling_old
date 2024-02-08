@@ -1,0 +1,235 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+<style>
+    body {
+
+        background-image: url("{% static 'images/bg4.jpg' %}");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+
+    }
+</style>
+
+{{ form.media }}
+<style>
+    .flatpickr-input {
+        display: none;
+    }
+</style>
+<div class=" offset-1 card  col-9 shadow-lg  rounded">
+    <div class="card-header">
+
+        <div class="title-list">
+            <i class="fa-solid fa-calendar-xmark"></i> Cancelar Cita
+        </div>
+        <b> </b>
+    </div>
+    <div class="card-body">
+        {% if error_message %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
+                
+                    {{ error_message }}
+                </div>
+            </div>
+                <p style="color: red;"></p>
+            </div>
+            <div class="col-md-6 mb-2">
+                <button type="button" id="btnSalir" class="btn btn-secondary"><i
+                        class="fa-solid fa-circle-arrow-left"></i> Volver</button>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+
+            <div class="col-md-4">
+                <div style="position: relative; display: inline-block;">
+                    <img style="height: 15rem; margin-left:1rem" src="{% static 'images/calendar.png' %}"
+                        class="card-img" alt="...">
+
+                    <h2 style="position: absolute; top: 55%; left: 55%; transform: translate(-50%, -50%); color: black; font-size:1.3rem; font-weight: bold; text-align: center;"
+                        id="fechaDividida">{{fecha}} </h2>
+                    <h2
+                        style="position: absolute; top: 80%; left: 55%; transform: translate(-50%, -50%); color: black; font-size:1.3rem; font-weight: bold;  text-align: center">
+                        {{hora}}</h2>
+
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class=" row">
+                    <label class="col-3 col-form-label title-list">Solicitante:</label>
+                    <div class="col-sm-6 col-form-label">
+                        {{nombre_solicitante}}
+                    </div>
+                </div>
+                <div class=" row">
+                    <label class="col-3 col-form-label title-list">Identificación:</label>
+                    <div class="col-sm-6 col-form-label">
+                        {{identificacion}}
+                    </div>
+                </div>
+                <div class=" row">
+                    <label class="col-3 col-form-label title-list">Trámite:</label>
+                    <div class="col-sm-6 col-form-label">
+                        {{tramite}}
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <label class="col-3 col-form-label title-list">Dependencia:</label>
+                    <div class="col-sm-6 col-form-label">
+                        {{dependencia}}
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-3 col-form-label title-list">Funcionario:</label>
+                    <div class="col-sm-6 col-form-label">
+                        {{funcionario}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-3 col-form-label title-list">Código cita</label>
+                    <div class="col-sm-8 col-form-label ">
+                        <b> {{uuid}}</b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2 ">
+                <div class="col-md-11 text-end">
+                    <button type="button" id="btnCancel" class="btn btn-success h2">Cancelar cita</button>
+                    <button type="button" id="btnSalir" class="btn btn-secondary h2">Salir</button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        {% endif %}
+    </div>
+</div>
+<script>
+
+    // Salir
+    btnSalir.addEventListener('click', (event) => {
+        var currentUrl = window.location.href;
+
+        // Crea un objeto URL utilizando la URL actual
+        var url = new URL(currentUrl);
+        var consult = url.searchParams.get('consult');
+        var typedoc = url.searchParams.get('typedoc');
+        var identification = url.searchParams.get('identification');
+        var email = url.searchParams.get('email');
+        var uuid = url.searchParams.get('uuid');
+        var consult = url.searchParams.get('consult');
+        var status = url.searchParams.get('status');
+
+        var redirectUrl = "{% url 'citation-cancel-form' %}";
+        if (consult){
+            var redirectUrl = "{% url 'citation-person-consult' %}?typedoc=" + typedoc + "&identification=" + identification + "&email=" + email + "&status=" + status;
+        }
+        
+        // Redirige a la nueva URL
+        window.location.href = redirectUrl;
+    });
+
+    // Cancelar cita
+    btnCancel.addEventListener('click', (event) => {
+        // Muestra un SweetAlert de confirmación
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: 'gray',
+            confirmButtonText: 'Sí, cancelar cita',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma, realiza la cancelación
+                var url = '/appointment/cancel?id={{ citation_id }}';
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(result => {
+                        // Muestra un SweetAlert de éxito
+                        Swal.fire({
+                            title: 'Cancelación exitosa',
+                            text: result.success,
+                            icon: 'success'
+                        });
+
+                        // Redirige después de un breve período de tiempo
+                        setTimeout(() => {
+                            var redirectUrl = "{% url 'citation-cancel-form' %}";
+                            window.location.href = redirectUrl;
+                        }, 500);
+                    })
+                    .catch(error => {
+                        console.log(error);
+
+                        // Muestra un SweetAlert de error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Ha ocurrido un error durante la cancelación.',
+                            icon: 'error'
+                        });
+
+                        // Redirige después de un breve período de tiempo
+                        setTimeout(() => {
+                            var redirectUrl = "{% url 'citation-cancel-form' %}";
+                            window.location.href = redirectUrl;
+                        }, 500);
+                    });
+            }
+        });
+    });
+
+</script>
+
+<style>
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+    }
+
+    .card-body {
+        padding: 0 1rem;
+        background-color: #fafafa;
+        margin-top: 1rem;
+
+    }
+
+    .card .card-header {
+        background-color: #ebeeee !important;
+
+    }
+
+    .title-list {
+        font-weight: bolder;
+        text-transform: capitalize;
+        color: #637381;
+    }
+</style>
+{% endblock content %}

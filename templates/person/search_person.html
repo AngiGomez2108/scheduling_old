@@ -1,0 +1,85 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+<style>
+  body{
+   
+    background-image: url("{% static 'images/IMG_4.jpg' %}");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+
+  }
+</style>
+
+
+<div class="  card shadow-lg  rounded" >
+    <div class="card-header">
+      <div >
+        <i class="fa-solid fa-calendar-day" style="color:#198754; "></i> <b>Reserve su cita</b>
+
+      </div>
+    </div>
+    <div class="card-body">
+     
+        <p class="offset-1 col-11 " >Favor ingresar el tipo y número de identificación actual de la 
+        persona que requiere el servicio</p>
+      <p class="card-text">
+
+        <form method="post">
+            {% csrf_token %}
+
+
+            <div class="offset-1 mb-3 row">
+              <label for="inputPassword" class="col-sm-5 col-form-label h2">Tipo de Identificación:</label>
+              <div class="col-sm-6">
+                {{ form.id_type_doc }}
+              </div>
+            </div>
+            <div class="offset-1 mb-3 row">
+              <label for="inputPassword" class="col-sm-5 col-form-label h2">Número documento:</label>
+              <div class="col-sm-6 ">
+                {{ form.identification }}
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-end col-11">
+              <button class="btn btn-success">  Siguiente <i class="fa-solid fa-circle-arrow-right"></i></button>
+           </div> 
+            
+       </form> 
+        
+    
+      </p>
+    </div>
+  </div>
+<style>
+   .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+        width: 53%
+    }
+
+    .card-body {
+        background-color: #fafafa;
+
+    }
+
+    .card .card-header {
+        {% comment %} background-color: #dfe2e2 !important; {% endcomment %}
+        background-color: #ebeeee !important;
+
+    }
+
+    .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+    }
+</style>
+{% endblock content %}

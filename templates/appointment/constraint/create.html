@@ -1,0 +1,93 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Registrar Restricción{% endblock title %}
+{% block content %}
+<div class=" card  shadow-lg  rounded">
+    <div class="card-header">
+        <b> Registrar Restricción </b>
+    </div>
+    <div class="card-body" style="background: url({% static 'images/mybg.png' %})">
+        <p class="card-text">
+
+
+
+        <div class="offset-1 mb-3 row">
+            <label for="place" class="col-2 col-form-label">Dependencia:</label>
+            <div class="col-3">
+                {{ form.place }}
+            </div>
+            <div class="col-4">
+                Funcionario: <span>xxxxxx</span>
+            </div>
+        </div>
+        <div class="offset-1 mb-3 row">
+            <label for="id_process" class="col-2 col-form-label">Trámite:</label>
+            <div class="col-3">
+                {{ form.id_process }}
+            </div>
+            <div class="col-4">
+                Tiempo de atención: <span>yyyyyy</span> minutos
+            </div>
+        </div>
+
+        <div class="table-responsive">
+        <table class="table table-sm caption-top table-striped table-hover align-middle ">
+            <caption>List of users</caption>
+            <thead>
+              <tr>
+                <th scope="col">Hora</th>
+                <th scope="col">Lunes</th>
+                <th scope="col">Martes</th>
+                <th scope="col">Miercoles</th>
+                <th scope="col">Jueves</th>
+                <th scope="col">Viernes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="">
+                <th scope="row">7:00</th>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+              </tr>
+              <tr>
+                <th scope="row">7:20</th>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+              </tr>
+              <tr>
+                <th scope="row">7:40</th>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+                <td><input type="checkbox"></td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-2">Hora</div>
+                <div class="col-2">Lunes</div>
+                <div class="col-2">Martes</div>
+                <div class="col-2">Miercoles</div>
+                <div class="col-2">Jueves</div>
+                <div class="col-2">Viernes</div>
+            </div>
+
+        </div>
+
+
+        </p>
+    </div>
+</div>
+{% endblock content %}

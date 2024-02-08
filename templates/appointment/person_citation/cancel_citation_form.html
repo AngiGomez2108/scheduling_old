@@ -1,0 +1,77 @@
+
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Cancle su cita{% endblock title %}
+{% block content %}
+<div class=" card shadow-lg  rounded">
+    <div class="card-header">
+      <div class="title-list">
+      <B>  <i class="fa-regular fa-calendar"></i></B>
+        Cancelar Cita
+
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        {% csrf_token %}
+        {% crispy form form.helper %}
+          <div class="container mt-4">
+            <div class="d-flex justify-content-end col-11">
+              <button type="button" id="btnRedirect" class="btn btn-success">Siguiente <i class="fa-solid fa-circle-arrow-right"></i></button>
+          </div>
+          </div>
+      </p>
+    </div>
+  </div>
+  <script>
+    $("#id_date").flatpickr({
+      //minDate: "today",
+      dateFormat: "d/m/Y",
+      locale: {
+          firstDayOfWeek: 0
+      },
+    });
+
+    $("#btnRedirect").click(function() {
+      // Obtiene los valores del formulario 
+      var typedoc = $("#id_type_doc").val(); 
+      var identification = $("#id_identification").val(); 
+      var email = $("#id_email").val();
+      var uuid = $("#id_uuid").val();
+
+      // Construye la URL con los valores del formulario
+      var redirectUrl = "{% url 'citation-cancel' %}?typedoc=" + typedoc + "&identification=" + identification + "&email=" + email + "&uuid=" + uuid;
+      // Redirige a la nueva URL
+      window.location.href = redirectUrl;    
+    });
+</script>
+
+<style>
+  .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+      border: 0;
+      border-radius: 0.5rem;
+      width: 65%;
+  }
+
+  .card-body {
+      padding: 0 1rem;
+      background-color: #fafafa;
+
+  }
+
+  .card .card-header {
+      background-color: #ebeeee !important;
+
+  }
+
+  .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+  }
+</style>
+{% endblock content %}

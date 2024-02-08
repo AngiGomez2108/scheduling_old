@@ -1,0 +1,44 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Detalles Trámite{% endblock title %}
+{% block content %}
+
+<div class=" card w-70 shadow-lg  rounded">
+    <div class="card-header">
+     <b> Detalles Trámite </b>
+    </div>
+    <div class="card-body" style="background: url({% static 'images/mybg.png' %})">
+      <p class="card-text">
+       
+        <div class="offset-1 mb-3 row">
+            <label  class="col-2 col-form-label"><B>Código:</B></label>
+            <div class="col-sm-8">
+                {{ object.id }}
+            </div>
+        </div>
+        <div class="offset-1 mb-3 row">
+            <label  class="col-2 col-form-label"><B>Dependencia:</B></label>
+            <div class="col-sm-8">
+                {{ object.id_place }}
+            </div>
+        </div>
+        <div class="offset-1 mb-3 row">
+            <label  class="col-sm-2 col-form-label"><B>Trámite:</B></label>
+            <div class="col-sm-8">
+                {{ object.name }}
+            </div>
+        </div>
+
+       
+        
+        <a href="../list" type="submit" class="offset-1 btn btn-primary">Volver</a>
+         
+      </p>
+    </div>
+  </div>
+
+
+{% endblock content %}

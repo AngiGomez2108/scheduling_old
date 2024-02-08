@@ -1,0 +1,52 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Log In{% endblock title %}
+{% block content %}
+<style>
+  body{
+   
+    background-image: url("{% static 'images/IMG_4.jpg' %}");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+
+  }
+</style>
+
+
+<div class=" card  shadow-lg  rounded">
+  <div class="card-header">
+    <b>Registrar Datos de Contacto</b>
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+     
+      {% crispy form form.helper %}
+
+    </p>
+  </div>
+</div>
+
+<style>
+      .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+        border: 0;
+        border-radius: 0.5rem;
+        
+    }
+
+    .card-body {
+        padding: 0 1rem;
+        background-color: #fafafa;
+
+    }
+
+    .card .card-header {
+        background-color: #ebeeee !important;
+
+    }
+</style>
+{% endblock content %}

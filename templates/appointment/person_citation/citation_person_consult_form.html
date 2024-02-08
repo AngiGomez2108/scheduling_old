@@ -1,0 +1,70 @@
+
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Cancle su cita{% endblock title %}
+{% block content %}
+<div class=" card  shadow-lg  rounded">
+    <div class="card-header">
+      <div class="title-list">
+        <b><i class="fa-solid fa-magnifying-glass" ></i></b> Consultar Citas
+      </div>
+     <b>  </b>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+       
+        {% crispy form form.helper %}
+        <div class="text-end col-11">
+          <button  type="button" id="btnRedirect" class="btn btn-success">Siguiente <i class="fa-solid fa-circle-arrow-right"></i></button>
+        </div>
+      </p>
+    </div>
+  </div>
+  <script>
+    $("#id_date").flatpickr({
+      //minDate: "today",
+      dateFormat: "d/m/Y",
+      locale: {
+          firstDayOfWeek: 0
+      },
+    });
+
+    $("#btnRedirect").click(function() {
+      // Obtiene los valores del formulario 
+      var typedoc = $("#id_type_doc").val(); 
+      var identification = $("#id_identification").val(); 
+      var email = $("#id_email").val();
+      var status = $("#id_status").val();
+
+      // Construye la URL con los valores del formulario
+      var redirectUrl = "{% url 'citation-person-consult' %}?typedoc=" + typedoc + "&identification=" + identification + "&email=" + email + "&status=" + status;
+      window.location.href = redirectUrl;    
+    });
+</script>
+
+<style>
+  .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(0, 0, 20, .08);
+      border: 0;
+      border-radius: 0.5rem;
+      width: 65%;
+  }
+
+  .card-body {
+      padding: 0 1rem;
+      background-color: #fafafa;
+
+  }
+
+  
+
+  .title-list {
+      font-weight: bolder;
+      text-transform: capitalize;
+      color: #637381;
+  }
+</style>
+{% endblock content %}

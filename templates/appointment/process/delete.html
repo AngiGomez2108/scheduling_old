@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Eliminar Trámite{% endblock title %}
+{% block content %}
+<div class=" card w-50 shadow-lg  rounded">
+  <div class="card-header">
+    <b> Eliminar Trámite </b>
+  </div>
+  <div class="card-body" style="background: url({% static 'images/mybg.png' %})">
+    <p class="card-text">
+
+    <form method="post">{% csrf_token %}
+      <p>Está seguro de eliminar Trámite: "<b>{{ object }}</b>"?</p>
+
+      <a class="btn btn-link me-5" href="../list" %} >Regresar</a>
+      <input type="submit" value="Eliminar" class="btn btn-danger">
+    </form>
+    </p>
+  </div>
+</div>
+
+
+{% endblock content %}

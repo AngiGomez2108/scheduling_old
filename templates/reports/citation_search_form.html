@@ -1,0 +1,45 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Reporte de Citas{% endblock title %}
+{% block content %}
+<div class=" card w-70 shadow-lg  rounded">
+    <div class="card-header">
+     <b> Reporte de Citas </b>
+    </div>
+    <div class="card-body" style="background: url({% static 'images/mybg.png' %})">
+      <p class="card-text">
+    
+        {% crispy form form.helper %}
+        <button type="button" id="btnRedirect" class="btn btn-primary">Generar Reporte</button>
+      </p>
+    </div>
+</div>
+  <script>
+    $("#id_date").flatpickr({
+      //minDate: "today",
+      dateFormat: "d/m/Y",
+      locale: {
+          firstDayOfWeek: 0
+      },
+    });
+
+    $("#btnRedirect").click(function() {
+      // Obtiene los valores del formulario
+      var nameValue = $("#id_person").val();  // Reemplaza "name" con el nombre real del campo
+      var placeValue = $("#id_process").val();  // Reemplaza "place" con el nombre real del campo
+      var dateValue = $("#id_date").val();  // Reemplaza "date" con el nombre real del campo
+      console.log(nameValue);
+      // Construye la URL con los valores del formulario
+      var redirectUrl = "{% url 'citation-list-pdf' %}?name=" + nameValue + "&process=" + placeValue + "&date=" + dateValue;
+      // Redirige a la nueva URL
+      window.open(redirectUrl, "_blank");
+
+     
+    });
+</script>
+{% endblock content %}
+
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Citas</title>
+</head>
+
+<body style="font-family: 'Arial', sans-serif;">
+    <h1 style="text-align: center; background-color: #e6f7ff; padding: 10px;">REPORTE DE CITAS</h1>
+    <div style="width: 70%; font-size: 12px;">
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;"
+                    class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;" scope="col">Cod</th>
+                            <th style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;" scope="col">Funcionario</th>
+                            <th style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;" scope="col">Solicitante</th>
+                            <th style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;" scope="col">Trámite</th>
+                            <th style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;" scope="col">Fecha</th>
+                            <th style="width: 15%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;" scope="col">Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for citation in citations %}
+                        <tr>
+                            <td style="width: 10%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;">{{ citation.id }}</td>
+                            <td style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;">{{ citation.id_process.id_functionary.name }}</td>
+                            <td style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;">{{ citation.id_person }}</td>
+                            <td style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;">{{ citation.id_process }}</td>
+                            <td style="width: 25%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;">{{ citation.date }}</td>
+                            <td style="width: 15%; border: 1px solid #ddd; padding: 5px; word-wrap: break-word; text-align: center;">{{ citation.time }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p style="text-align: right; margin: 10px;  position: fixed; top: 0; right: 0;">Registros: {{ quantity }} </p>
+    </div>
+</body>
+</html>
